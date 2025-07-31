@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import bcrypt from "bcryptjs";
+import { generateToken } from "../utils/jwt";
 
 //User register
 export const registerUser = async (req: Request, res: Response) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role = "client" } = req.body; // dejamos asi x ahora para facilitar el testing
 
         //validate nothing is missing
         if (!name || !email || !password) {
@@ -25,6 +26,7 @@ export const registerUser = async (req: Request, res: Response) => {
             name,
             email,
             password: hashedPassword,
+            role,
         });
 
         await newUser.save();
@@ -32,5 +34,24 @@ export const registerUser = async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error registering user:", error);
         res.status(500).json({ message: "Server Error" });
+    }
+}
+
+//metodo login
+
+export const loginUser = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(401).json({ message: "User not found" })
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(401).json({ message: "Invalid credentials" })
+
+        const token = generateToken({ id: user._id, role: user.role })
+        res.json({ token })
+
+    } catch (error) {
+        res.status(500).json({ message: "Login error", error })
     }
 }

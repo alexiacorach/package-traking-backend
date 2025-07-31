@@ -6,10 +6,11 @@ export interface IUser extends Document {
     name : string;
     email : string;
     password : string;
-    createdAT: Date;
+    createdAt: Date;
+    role: "client" | "admin" | "courier"
 }
 
-const UserSchema : Schema = new Schema ({
+const UserSchema : Schema = new Schema<IUser> ({
     name : {
         type: String,
         required: true,
@@ -26,10 +27,17 @@ const UserSchema : Schema = new Schema ({
         required: true,
         minlength: 6,
     },
-    creatdeAt: {
+    createdAt: {
         type: Date,
         default: Date.now,
     },
+    role: {
+        type: String,
+        enum : ["client", "admin", "courier"],
+        default: "client",
+        required: true
+    }
 })
 
-export default mongoose.model<IUser>("User", UserSchema);
+const User = mongoose.model<IUser>("User", UserSchema);
+export default User;
