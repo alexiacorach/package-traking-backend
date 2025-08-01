@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import userRoutes from "./routes/userRoutes";
+import packageRoutes from "./routes/packageRoutes";
 
 dotenv.config()
 
@@ -11,7 +12,9 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 
+
 app.use("/api/users", userRoutes)
+app.use("/api/packages", packageRoutes);
 
 
 app.get("/" , (_req, res) => {

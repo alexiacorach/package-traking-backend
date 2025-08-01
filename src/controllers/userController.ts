@@ -3,7 +3,7 @@ import User from "../models/User";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/jwt";
 
-//User register
+//User register, crea usuario, encripta contraseña
 export const registerUser = async (req: Request, res: Response) => {
     try {
         const { name, email, password, role = "client" } = req.body; // dejamos asi x ahora para facilitar el testing
@@ -37,7 +37,7 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 }
 
-//metodo login
+//metodo login, valida credenciales, genera token con { id, role }
 
 export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;

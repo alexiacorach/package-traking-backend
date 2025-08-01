@@ -7,6 +7,7 @@ export interface AuthRequest extends Request {
   user?: any;
 }
 
+//Lee el header Authorization, verifica JWT y guarda req.user = decoded.
 export const authenticate = (req: AuthRequest, res: Response , next: NextFunction)=> {
     const token = req.headers.authorization?.split(" ")[1];
     if(!token) return res.status(401).json ({message: "No token provided"})
@@ -20,6 +21,8 @@ export const authenticate = (req: AuthRequest, res: Response , next: NextFunctio
         }
 }
 
+
+//Recibe roles permitidos (["admin"], etc) y verifica req.user.role.
 export const authorizeRoles = (...roles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!roles.includes(req.user.role)) {
