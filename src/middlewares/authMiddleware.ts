@@ -22,7 +22,7 @@ export const authenticate = (req: AuthRequest, res: Response , next: NextFunctio
 }
 
 
-//Recibe roles permitidos (["admin"], etc) y verifica req.user.role.
+//Recibe roles permitidos (["admin"], etc) y verifica req.user.role.Permite restringir rutas por rol
 export const authorizeRoles = (...roles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!roles.includes(req.user.role)) {
