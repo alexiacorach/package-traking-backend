@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/jwt";
+import { AuthRequest } from "../middlewares/authMiddleware";
 
 //User register, crea usuario, encripta contraseña
 export const registerUser = async (req: Request, res: Response) => {
@@ -38,7 +39,6 @@ export const registerUser = async (req: Request, res: Response) => {
 }
 
 //metodo login, valida credenciales, genera token con { id, role }
-
 export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     try {
@@ -53,5 +53,21 @@ export const loginUser = async (req: Request, res: Response) => {
 
     } catch (error) {
         res.status(500).json({ message: "Login error", error })
+    }
+}
+
+//Admin can visualize all users
+export const getAllUsers = async (req: AuthRequest, res: Response) => {
+    try{
+    if (req.user.role !== "admin") {
+            return res.status(403).json({ message: "Only admins can view users" });
+        }
+
+        const users = await User.find({}, "name email role createdAt");
+
+        res.status(200).json(users);
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ message: "Server error fetching users" });
     }
 }

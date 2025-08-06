@@ -30,7 +30,7 @@ const packageSchema: Schema = new Schema(
         status: {
             type: String,
             enum: Object.values(packageState),
-            default: packageState.Pending
+            
         },
         client: {
             type: mongoose.Schema.Types.ObjectId,

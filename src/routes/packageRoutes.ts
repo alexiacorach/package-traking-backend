@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { assignPackageToDelivery, createPackage, getAssignedPackages, getMyPackages } from "../controllers/packageController";
+import { assignPackageToDelivery, createPackage, getAllPackages, getAssignedPackages, getMyPackages, updatePackageStatus } from "../controllers/packageController";
 import { authenticate, authorizeRoles } from "../middlewares/authMiddleware";
 
 const router = Router();
@@ -15,5 +15,11 @@ router.get("/assigned", authenticate, authorizeRoles("delivery"), getAssignedPac
 
 //Admin asigna paquete a delivery
 router.put("/assign", authenticate, authorizeRoles("admin"), assignPackageToDelivery)
+
+// Estado de paquete
+router.put("/status", authenticate, authorizeRoles("delivery"), updatePackageStatus)
+
+//Admin visualiza todos los paquetes
+router.get("/all", authenticate, authorizeRoles("admin"), getAllPackages);
 
 export default router;
