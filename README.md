@@ -35,4 +35,4 @@ Actualmente el backend está completamente funcional, probado con Thunder Client
 - **JWT** (Autenticación)
 - **bcryptjs** (Encriptación de contraseñas)
 - **dotenv** (Variables de entorno)
-- **Postman** (para testing de endpoints)
+- **Thunder Client** (para testing de endpoints)
